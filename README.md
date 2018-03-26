@@ -10,7 +10,9 @@ Useful in cases where builds perform deployments that would otherwise interfere.
 
 2. Set `TRAVIS_ENDPOINT` to `https://api.travis-ci.org` or `https://api.travis-ci.com` for public or private repositories, respectively.
 
-3. Add to `.travis.yml`:
+3. Set `ONEBUILD_BRANCHES` to a comma-separated list of branches like `master,staging,production`. If left unset, `onebuild` will restrict *all* branches to one `push` build each.
+
+4. Add to `.travis.yml`:
 
     ```yaml
     language: go
