@@ -111,7 +111,7 @@ func callTravisAPI(method, path string, expectStatus int, bodyValue interface{})
 func firstMatchingBuild(states, sortBy string) Build {
 	vs := url.Values{}
 	vs.Add("build.event_type", "push")
-	vs.Add("build.branch", travisBranch)
+	vs.Add("branch.name", travisBranch)
 	vs.Add("sort_by", sortBy)
 	if states != "" {
 		vs.Add("build.state", states)
