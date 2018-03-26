@@ -1,8 +1,31 @@
 # Travis build sequencer
 
-Force `push` builds in Travis to run one at a time without setting a concurrency limit for all builds.
+Limit `push` builds in Travis to one per branch.
 
-Useful in cases where `push` builds perform deployments that would otherwise interfere.
+Useful in cases where builds perform deployments that would otherwise interfere.
+
+## Usage
+
+1. Get a Travis API token -- probably for a bot user -- and set the `TRAVIS_TOKEN` environment variable for the repository.
+
+2. Set `TRAVIS_ENDPOINT` to `https://api.travis-ci.org` or `https://api.travis-ci.com` for public or private repositories, respectively.
+
+3. Add to `.travis.yml`:
+
+    ```yaml
+    language: go
+
+    before_install:
+    # Get the tool
+    - git clone git@github.com:pulumi/onebuild ${GOPATH}/src/github.com/pulumi/onebuild
+    - go install github.com/pulumi/onebuild
+    # Proceed or cancel this build
+    - onebuild start
+
+    after_script:
+    # Maybe kick off a waiting build
+    - onebuild finish
+    ```
 
 ## Goals and approach
 
@@ -11,6 +34,8 @@ Useful in cases where `push` builds perform deployments that would otherwise int
 When a build starts, it checks if it is the running (i.e. `started`) build with the earliest `started_at` time. If so, it proceeds. Otherwise, it exits by cancelling itself.
 
 When a build observes itself to be first by this ordering, it will remain first until it exits -- and it will _always_ have been first from the perspective of any other running build. This lets us use "earliest-started running build" as a simple and stable master-election strategy.
+
+_TODO_: What if two builds report exactly the same start time?
 
 ### Newest build will eventually run
 
