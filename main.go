@@ -24,7 +24,7 @@ func mustGetenv(key string) string {
 func mustParseURL(v string) *url.URL {
 	url, err := url.Parse(v)
 	if err != nil {
-		log.Fatalf("can't parse %v as URL", v)
+		log.Fatalf("can't parse %v as URL: %v", v, err)
 	}
 	return url
 }
@@ -32,7 +32,7 @@ func mustParseURL(v string) *url.URL {
 func mustAtoi(v string) int {
 	i, err := strconv.Atoi(v)
 	if err != nil {
-		log.Fatalf("can't convert %v to int", v)
+		log.Fatalf("can't convert %v to int: %v", v, err)
 	}
 	return i
 }
