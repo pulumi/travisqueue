@@ -170,7 +170,7 @@ func main() {
 		found := false
 		for _, b := range onebuildBranches {
 			if b == travisBranch {
-				found := true
+				found = true
 				break
 			}
 		}
