@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -42,8 +43,13 @@ var (
 
 	travisBuildID = mustAtoi(mustGetenv("TRAVIS_BUILD_ID"))
 
-	travisBranch   = mustGetenv("TRAVIS_BRANCH")
-	travisRepoSlug = mustGetenv("TRAVIS_REPO_SLUG")
+	travisEventType = mustGetenv("TRAVIS_EVENT_TYPE")
+	travisBranch    = mustGetenv("TRAVIS_BRANCH")
+	travisRepoSlug  = mustGetenv("TRAVIS_REPO_SLUG")
+
+	// Comma-separated list of branches to limit to one build.
+	// If unset or empty, limit *all* branches to one build.
+	onebuildBranches = strings.Split(os.Getenv("ONEBUILD_BRANCHES"), ",")
 )
 
 // https://developer.travis-ci.org/resource/build#Build
@@ -152,11 +158,33 @@ func restartBuild(id int) {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %v {start|finish}\n", os.Args[0])
+	// Ignore non-push builds.
+	if travisEventType != "push" {
+		log.Print("Not a push build. Exiting.")
+		os.Exit(0)
 	}
 
-	command := os.Args[1]
+	// If ONEBUILD_BRANCHES is set, ignore branches not in that list.
+	if len(onebuildBranches) > 0 {
+		found := false
+		for _, b := range onebuildBranches {
+			if b == travisBranch {
+				found := true
+				break
+			}
+		}
+
+		if !found {
+			log.Printf("Branch %v not in %v. Exiting.", travisBranch, onebuildBranches)
+			os.Exit(0)
+		}
+	}
+
+	command := ""
+	if len(os.Args) > 1 {
+		command = os.Args[1]
+	}
+
 	switch command {
 	case "start":
 		// Check we're the running build with the earliest start time.
@@ -184,6 +212,6 @@ func main() {
 		}
 
 	default:
-		log.Fatalf("Invalid command %v\n", command)
+		log.Fatalf("Usage: %v {start|finish}\n", os.Args[0])
 	}
 }
