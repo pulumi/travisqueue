@@ -38,6 +38,7 @@ func mustAtoi(v string) int {
 }
 
 var (
+	// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
 	travisEndpoint = mustParseURL(mustGetenv("TRAVIS_ENDPOINT"))
 	travisToken    = mustGetenv("TRAVIS_TOKEN")
 
