@@ -37,8 +37,6 @@ When a build starts, it checks if it is the running (i.e. `started`) build with 
 
 When a build observes itself to be first by this ordering, it will remain first until it exits -- and it will _always_ have been first from the perspective of any other running build. This lets us use "earliest-started running build" as a simple and stable master-election strategy.
 
-> _TODO_: What if two builds report exactly the same start time?
-
 ### Newest build will eventually run
 
 When a running build finishes (successfully or not), it looks at the most recently queued build (i.e. highest `ID`, since Travis assigns monotonically-increasing `ID`s) and restarts it if its state is `canceled`. Intervening builds are skipped for efficiency.
