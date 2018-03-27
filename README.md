@@ -33,7 +33,7 @@ Useful in cases where builds perform deployments that would otherwise interfere.
 
 ### One build at a time
 
-When a build starts, it checks if it is the running (i.e. `started`) build with the earliest `started_at` time. If so, it proceeds. Otherwise, it exits by cancelling itself.
+When a build starts, it checks if it is the running (i.e. `started`) build with the **earliest `started_at` time**. If so, it proceeds. Otherwise, it exits by cancelling itself.
 
 When a build observes itself to be first by this ordering, it will remain first until it exits -- and it will _always_ have been first from the perspective of any other running build. This lets us use "earliest-started running build" as a simple and stable master-election strategy.
 
