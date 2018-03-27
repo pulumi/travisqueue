@@ -41,7 +41,7 @@ When a build observes itself to be first by this ordering, it will remain first 
 
 When a running build finishes (successfully or not), it looks at the most recently queued build (i.e. highest `ID`, since Travis assigns monotonically-increasing `ID`s) and restarts it if its state is `canceled`. Intervening builds are skipped for efficiency.
 
-It is possible for a build to cancel itself at exactly the wrong moment: before the build it's waiting for has finished, but _after_ that build has looked for -- and not found -- a `canceled` build to restart.
+It is possible for a build to cancel itself at exactly the wrong moment: before the build it's waiting for has finished, but _after_ that build has looked for -- and not found -- a `canceled` build to restart. The queue may also stall if a build is killed by Travis, perhaps because of a timeout.
 
 The next queued build will run without incident, so this should only be a brief problem for active repositories. The `canceled` build can also be manually restarted. If we end up hitting this problem often, we can consider waiting for the newest build to _become_ `canceled` (as it must) so we can restart it.
 
