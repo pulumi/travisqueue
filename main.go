@@ -38,19 +38,19 @@ func mustAtoi(v string) int {
 }
 
 var (
-	// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
 	travisEndpoint = mustParseURL(mustGetenv("TRAVIS_ENDPOINT"))
 	travisToken    = mustGetenv("TRAVIS_TOKEN")
 
+	// Comma-separated list of branches to limit to one build.
+	// If unset or empty, limit *all* branches to one build.
+	onebuildBranches = strings.Split(os.Getenv("ONEBUILD_BRANCHES"), ",")
+
+	// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
 	travisBuildID = mustAtoi(mustGetenv("TRAVIS_BUILD_ID"))
 
 	travisEventType = mustGetenv("TRAVIS_EVENT_TYPE")
 	travisBranch    = mustGetenv("TRAVIS_BRANCH")
 	travisRepoSlug  = mustGetenv("TRAVIS_REPO_SLUG")
-
-	// Comma-separated list of branches to limit to one build.
-	// If unset or empty, limit *all* branches to one build.
-	onebuildBranches = strings.Split(os.Getenv("ONEBUILD_BRANCHES"), ",")
 )
 
 // https://developer.travis-ci.org/resource/build#Build
