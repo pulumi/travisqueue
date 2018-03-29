@@ -124,7 +124,6 @@ func firstMatchingBuild(states, sortBy string) Build {
 	callTravisAPI("GET", path, http.StatusOK, &builds)
 
 	if len(builds.Builds) == 0 {
-		// We should at least see ourselves.
 		log.Fatal("found no builds")
 	}
 
