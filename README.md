@@ -19,7 +19,6 @@ Useful in cases where builds perform deployments that would otherwise interfere.
 
     before_install:
     # Get the tool
-    - git clone git@github.com:pulumi/travisqueue ${GOPATH}/src/github.com/pulumi/travisqueue
     - go install github.com/pulumi/travisqueue
     # Proceed or cancel this build
     - travisqueue start
