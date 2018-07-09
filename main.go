@@ -43,7 +43,7 @@ var (
 
 	// Comma-separated list of branches to limit to one build.
 	// If unset or empty, limit *all* branches to one build.
-	onebuildBranches = strings.Split(os.Getenv("ONEBUILD_BRANCHES"), ",")
+	queueBranches = strings.Split(os.Getenv("TRAVIS_QUEUE_BRANCHES"), ",")
 
 	// https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
 	travisBuildID = mustAtoi(mustGetenv("TRAVIS_BUILD_ID"))
@@ -164,10 +164,10 @@ func main() {
 		os.Exit(0)
 	}
 
-	// If ONEBUILD_BRANCHES is set, ignore branches not in that list.
-	if len(onebuildBranches) > 0 {
+	// If TRAVIS_QUEUE_BRANCHES is set, ignore branches not in that list.
+	if len(queueBranches) > 0 {
 		found := false
-		for _, b := range onebuildBranches {
+		for _, b := range queueBranches {
 			if b == travisBranch {
 				found = true
 				break
@@ -175,7 +175,7 @@ func main() {
 		}
 
 		if !found {
-			log.Printf("Branch %v not in %v. Exiting.", travisBranch, onebuildBranches)
+			log.Printf("Branch %v not in %v. Exiting.", travisBranch, queueBranches)
 			os.Exit(0)
 		}
 	}

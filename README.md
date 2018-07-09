@@ -10,7 +10,7 @@ Useful in cases where builds perform deployments that would otherwise interfere.
 
 2. Set `TRAVIS_ENDPOINT` to `https://api.travis-ci.org` or `https://api.travis-ci.com` for public or private repositories, respectively.
 
-3. Set `ONEBUILD_BRANCHES` to a comma-separated list of branches like `master,staging,production`. If left unset, `onebuild` will restrict *all* branches to one `push` build each.
+3. Set `TRAVIS_QUEUE_BRANCHES` to a comma-separated list of branches like `master,staging,production`. If left unset, `travisqueue` will restrict *all* branches to one `push` build each.
 
 4. Add to `.travis.yml`:
 
@@ -19,14 +19,14 @@ Useful in cases where builds perform deployments that would otherwise interfere.
 
     before_install:
     # Get the tool
-    - git clone git@github.com:pulumi/onebuild ${GOPATH}/src/github.com/pulumi/onebuild
-    - go install github.com/pulumi/onebuild
+    - git clone git@github.com:pulumi/travisqueue ${GOPATH}/src/github.com/pulumi/travisqueue
+    - go install github.com/pulumi/travisqueue
     # Proceed or cancel this build
-    - onebuild start
+    - travisqueue start
 
     after_script:
     # Maybe kick off a waiting build
-    - onebuild finish
+    - travisqueue finish
     ```
 
 ## Goals and approach
