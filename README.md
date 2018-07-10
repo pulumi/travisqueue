@@ -19,7 +19,7 @@ Useful in cases where builds perform deployments that would otherwise interfere.
 
     before_install:
     # Get the tool
-    - go install github.com/pulumi/travisqueue
+    - go get github.com/pulumi/travisqueue
     # Proceed or cancel this build
     - travisqueue start
 
